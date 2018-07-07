@@ -14,8 +14,16 @@ class PostForm(ModelForm):
         model = Post
         fields = ['user', 'date', 'body']
 
+# def post_list(request):
+#     populated = Post.objects.all()
+#     populated.user = PrimaryKeyRelatedField(queryset=User.objects.all())
+#     data = serializers.serialize("json", populated)
+
 def post_list(request):
-    data = serializers.serialize("json", Post.objects.all())
+    populated = Post.objects.all()
+    populated.user = user_set.get(pk = populated.user)
+    data = serializers.serialize("json", populated)
+
     return JsonResponse(data, safe=False)
 
 # def post_list(request, template_name='blog_posts/post_list.html'):

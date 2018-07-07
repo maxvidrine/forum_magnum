@@ -10,5 +10,9 @@ class User(models.Model):
 
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
+    # user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     date = models.DateTimeField(default=timezone.now)
     body = models.TextField()
+
+    # class Meta:
+    #     model = models.PrimaryKeyRelatedField(queryset)

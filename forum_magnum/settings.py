@@ -40,9 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'forum',
     'django_extensions',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -50,6 +52,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'forum_magnum.urls'
@@ -71,6 +75,14 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'forum_magnum.wsgi.application'
+
+# configuring cors
+CORS_ORIGIN_WHITELIST = (
+    'hostname.example.com',
+    'localhost:3000',
+    '127.0.0.1:9000'
+)
+
 
 
 # Database
