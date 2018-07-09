@@ -3,6 +3,7 @@ from django.core import serializers
 from django.http import JsonResponse
 from django.forms import ModelForm
 from .models import User, Post
+from django.utils import timezone
 
 
 def user_list(request):
@@ -14,23 +15,21 @@ class PostForm(ModelForm):
         model = Post
         fields = ['user', 'date', 'body']
 
-# def post_list(request):
-#     populated = Post.objects.all()
-#     populated.user = PrimaryKeyRelatedField(queryset=User.objects.all())
-#     data = serializers.serialize("json", populated)
-
 def post_list(request):
-    populated = Post.objects.all()
-    populated.user = user_set.get(pk = populated.user)
-    data = serializers.serialize("json", populated)
-
-    return JsonResponse(data, safe=False)
-
-# def post_list(request, template_name='blog_posts/post_list.html'):
-#     posts = blog_posts.objects.all()
-#     data = {}
-#     data['object_list'] = posts
-#     return render(request, template_name, data)
+    posts = Post.objects.all()
+    populated = []
+    for post in posts:
+        date_difference = timezone.now
+        print(date_difference)
+        pop = {
+            'pk': post.pk,
+            'user': post.user.name,
+            'photo_url': post.user.photo_url,
+            'date': post.date,
+            'body': post.body,
+        }
+        populated.append(pop)
+    return JsonResponse(populated, safe=False)
 
 def post_create(request):
     form = PostForm(request.POST or None)
