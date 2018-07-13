@@ -27,7 +27,16 @@
 Django Back End
 * Django REST Framework
 * CORS
+* JWT-Simple
 
 React Front End
+* Axios
 * Redux (for Auth)
 * Semantic UI React
+
+## Thanks especially to
+* Binam
+* Justin
+* June
+* Dalton
+* Troy
