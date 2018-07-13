@@ -40,3 +40,7 @@ React Front End
 * June
 * Dalton
 * Troy
+
+
+## Code Highlights
+* Homespun GET request
