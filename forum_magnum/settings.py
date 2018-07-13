@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'forum',
     'django_extensions',
     'corsheaders',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -83,6 +84,16 @@ CORS_ORIGIN_WHITELIST = (
     '127.0.0.1:9000'
 )
 
+# Rest Framework
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+}
 
 
 # Database

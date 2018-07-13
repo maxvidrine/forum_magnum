@@ -2,42 +2,63 @@ from django.shortcuts import render
 from django.core import serializers
 from django.http import JsonResponse
 from django.forms import ModelForm
-from .models import User, Post
+from .models import User, Comment, Profile
 from django.utils import timezone
+from .serializers import CommentSerializer
+from rest_framework import generics
+
+from django.utils.six import BytesIO
+from rest_framework.parsers import JSONParser
 
 
 def user_list(request):
     data = serializers.serialize("json", User.objects.all())
     return JsonResponse(data, safe=False)
 
-class PostForm(ModelForm):
+class PostCreate(generics.CreateAPIView):
+    model = Comment
+    serializer_class = CommentSerializer
+
+
+
+
+class CommentForm(ModelForm):
     class Meta:
-        model = Post
+        model = Comment
         fields = ['user', 'date', 'body']
 
-def post_list(request):
-    posts = Post.objects.all()
+def comment_list(request):
+    comments = Comment.objects.all()
     populated = []
-    for post in posts:
+    for comment in comments:
         date_difference = timezone.now
-        print(date_difference)
         pop = {
-            'pk': post.pk,
-            'user': post.user.name,
-            'photo_url': post.user.photo_url,
-            'date': post.date,
-            'body': post.body,
+            'pk': comment.pk,
+            'user': comment.user.username,
+            'photo_url': comment.user.profile.avatar,
+            'date': comment.date,
+            'body': comment.body,
         }
         populated.append(pop)
     return JsonResponse(populated, safe=False)
 
-def post_create(request):
-    form = PostForm(request.POST or None)
+def comment_create(request):
+    print(request.POST)
+    stream = BytesIO(request)
+    data = JSONParser().parse(stream)
+    serializer = CommentSerializer(data=data)
+    serializer.is_valid()
+    serializer.validated_data
+    form = CommentForm(request.POST or None)
     if form.is_valid():
         form.save()
-        data = serializers.serialize("json", Post.objects.all())
+        data = serializers.serialize("json", Comment.objects.all())
         return JsonResponse(data, safe=False)
     return JsonResponse({'Error': 'Form is invalid'})
+
+
+
+
 
 # def post_update(request, pk, template_name='blog_posts/post_form.html'):
 #     post = get_object_or_404(blog_posts, pk=pk)
